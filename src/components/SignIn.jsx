@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 import { signIn } from '../services/authService';
 
@@ -23,23 +23,27 @@ const SignIn = () => {
   };
 
   return (
-    <form onSubmit={handleSignIn}>
-      <h2>Sign In</h2>
-      <input
-        type="email"
-        placeholder="Email"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-      />
-      <input
-        type="password"
-        placeholder="Password"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-      />
-      <button type="submit">Sign In</button>
-      <p>{message}</p>
-    </form>
+    <>
+      <form onSubmit={handleSignIn}>
+        <h2>Sign In</h2>
+        <input
+          type="email"
+          placeholder="Email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+        />
+        <input
+          type="password"
+          placeholder="Password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+        />
+        <button type="submit">Sign In</button>
+        <p>{message}</p>
+        
+      </form>
+      <Link to="/signup">sign up here</Link>
+    </>
   );
 };
 
