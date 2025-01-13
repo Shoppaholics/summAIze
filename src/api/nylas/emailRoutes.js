@@ -39,6 +39,7 @@ router.get("/read", async (req, res) => {
           { emailAddress: email.email, emails: messages, error: null },
         ];
       } catch (error) {
+        console.error(error);
         retrievedEmails = [
           ...retrievedEmails,
           {
