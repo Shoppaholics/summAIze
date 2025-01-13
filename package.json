@@ -1,11 +1,16 @@
 {
   "name": "summaize",
   "version": "0.1.0",
+  "type": "module",
   "private": true,
   "dependencies": {
     "@supabase/supabase-js": "^2.47.12",
+    "axios": "^1.7.9",
+    "cors": "^2.8.5",
     "cra-template": "1.2.0",
+    "dotenv": "^16.4.7",
     "express": "^4.21.2",
+    "nylas": "^7.7.2",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-router-dom": "^7.1.1",

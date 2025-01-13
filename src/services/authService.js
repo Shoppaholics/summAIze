@@ -1,4 +1,4 @@
-import { supabase } from "../lib/supabaseClient";
+import { supabase } from "../lib/supabaseClientFrontend.js";
 
 export const signIn = async (email, password) => {
   if (!email) {
@@ -39,12 +39,32 @@ export const signUp = async (email, password) => {
 };
 
 export const getSession = async () => {
-  const { data, error } = await supabase.auth.getSession();
-
-  if (error) {
-    console.error(error);
-    return { session: null, error: error.message };
+  const response = await supabase.auth.getSession();
+  if (response.error) {
+    console.error(response.error.stack);
+    return { error: "Error getting user session details" };
   }
 
-  return { session: data.session, error: null };
+  const userId = response.data?.session?.user?.id;
+
+  if (!userId) {
+    return { error: "User ID not found" };
+  }
+
+  // Retrieve connected emails
+  const { data, error } = await supabase
+    .from("user_nylas")
+    .select("user_id, email, provider")
+    .eq("user_id", userId);
+
+  if (error) {
+    console.error(error.stack);
+    return { error: "Error getting user connected emails" };
+  }
+
+  return {
+    session: response.data?.session,
+    connectedEmails: data,
+    error: null,
+  };
 };
