@@ -1,24 +1,24 @@
-import { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 
-import { signIn } from '../services/authService';
+import { signIn } from "../services/authService";
 
 const SignIn = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [message, setMessage] = useState('');
-  
-  const navigate = useNavigate()
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [message, setMessage] = useState("");
+
+  const navigate = useNavigate();
 
   const handleSignIn = async (event) => {
     event.preventDefault();
 
-    const { success, error } = await signIn(email, password)
+    const { success, error } = await signIn(email, password);
 
     if (error) {
       setMessage(error);
     } else if (success) {
-      navigate('/');
+      navigate("/");
     }
   };
 
@@ -40,7 +40,6 @@ const SignIn = () => {
         />
         <button type="submit">Sign In</button>
         <p>{message}</p>
-        
       </form>
       <Link to="/signup">sign up here</Link>
     </>
