@@ -1,7 +1,7 @@
 import express from "express";
 
-import { supabase } from "../../lib/supabaseClientBackend.js";
 import { nylas, nylasConfig } from "../../lib/nylasClient.js";
+import { supabase } from "../../lib/supabaseClientBackend.js";
 
 const router = express.Router();
 
