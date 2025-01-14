@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 
+import EventCard from "../components/EventCard";
 import { useAuth } from "../context/AuthContext";
-import { fetchCalendars } from "../services/calendarService";
+import { fetchCalendarsWithEvents } from "../services/calendarService";
 
 const TaskPage = () => {
   const { session } = useAuth();
@@ -10,9 +11,9 @@ const TaskPage = () => {
   const [calendars, setCalendars] = useState(null);
 
   const handleFetchCalendars = async () => {
-    const { fetchedCalendars } = await fetchCalendars(userId);
+    const { fetchedCalendars } = await fetchCalendarsWithEvents(userId);
+    console.log(fetchedCalendars);
     setCalendars(fetchedCalendars);
-    console.log("Calen", calendars);
   };
 
   return (
@@ -21,11 +22,14 @@ const TaskPage = () => {
       <div>
         {calendars?.map((provider, index) => (
           <div key={index}>
-            <h3>{provider.email}</h3>
+            <h3>Provider/Email: {provider.email}</h3>
             <div>
-              {provider.calendars?.data?.map((calendar, index) => (
+              {provider.calendars?.map((calendar, index) => (
                 <div key={index}>
-                  <h5>{calendar.name}</h5>
+                  <h5>Calendar name: {calendar.name}</h5>
+                  {calendar.events.map((event, index) => (
+                    <EventCard key={index} title={event.title} />
+                  ))}
                 </div>
               ))}
             </div>
