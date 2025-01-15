@@ -6,6 +6,8 @@ import Calendar from "./pages/Calendar.jsx";
 import Home from "./pages/Home.jsx";
 import SignIn from "./pages/SignIn.jsx";
 import SignUp from "./pages/SignUp.jsx";
+import TextToTask from "./components/TextToTask.jsx";
+
 const App = () => {
   return (
     <AuthProvider>
@@ -14,6 +16,7 @@ const App = () => {
           <Route path="/signup" element={<SignUp />} />
           <Route path="/signin" element={<SignIn />} />
           <Route path="/calendar" element={<Calendar />} />
+          <Route path="/summary" element={<TextToTask />} />
           <Route path="/" element={<Home />} />
         </Routes>
       </Router>
