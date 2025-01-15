@@ -3,7 +3,8 @@ import { Link } from "react-router-dom";
 
 import { supabase } from "../lib/supabaseClientFrontend";
 import { getSession } from "../services/authService";
-import { fetchEmails } from "../services/emailService";
+//import { fetchEmails } from "../services/emailService";
+import { summarizeEmails } from "../services/geminiService";
 import { connectEmailWithNylas } from "../services/nylasService";
 
 const Home = () => {
@@ -51,13 +52,37 @@ const Home = () => {
     }
   };
 
-  // Fetch email threads
-  const handleFetchEmails = async () => {
+  // // Fetch email threads
+  // const handleFetchEmails = async () => {
+  //   setLoading(true);
+  //   const { emails } = await fetchEmails(user?.id);
+  //   console.log(emails);
+  //   setEmails(emails);
+  //   setLoading(false);
+  // };
+
+  // Fetch summarized emails
+  const summarizeFetchedEmails = async () => {
     setLoading(true);
-    const { emails } = await fetchEmails(user?.id);
-    console.log(emails);
-    setEmails(emails);
+    const { summary } = await summarizeEmails(user?.id);
+    console.log(summary);
+    setEmails(summary);
     setLoading(false);
+
+    // try {
+    //   // call backend API to summarize emails
+    //   const response = await axios.get(
+    //   "http://localhost:3000/summarize-email-gemini",
+    //   {
+    //     params: {userId }
+    //   });
+
+    //   setEmails(response.data);
+    // } catch(error) {
+    //   console.error('Error fetching summarized emails:', error);
+    // } finally {
+    //   setLoading(false);
+    // }
   };
 
   const handleSignOut = async () => {
@@ -75,7 +100,7 @@ const Home = () => {
       <div>
         <button onClick={connectEmail}>Connect email</button>
         <p>{message}</p>
-        <button onClick={handleFetchEmails} disabled={loading}>
+        <button onClick={summarizeFetchedEmails} disabled={loading}>
           Fetch emails
         </button>
       </div>

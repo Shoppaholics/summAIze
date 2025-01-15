@@ -4,6 +4,7 @@
   "type": "module",
   "private": true,
   "dependencies": {
+    "@google-cloud/aiplatform": "^3.34.0",
     "@supabase/supabase-js": "^2.47.12",
     "axios": "^1.7.9",
     "cors": "^2.8.5",
@@ -15,6 +16,7 @@
     "react-dom": "^19.0.0",
     "react-router-dom": "^7.1.1",
     "react-scripts": "5.0.1",
+    "url": "^0.11.4",
     "web-vitals": "^4.2.4"
   },
   "scripts": {
