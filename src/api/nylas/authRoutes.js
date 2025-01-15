@@ -1,7 +1,7 @@
 import express from "express";
 
-import { supabase } from "../../lib/supabaseClientBackend.js";
 import { nylas, nylasConfig } from "../../lib/nylasClient.js";
+import { supabase } from "../../lib/supabaseClientBackend.js";
 
 const router = express.Router();
 
@@ -16,7 +16,6 @@ router.get("/", async (req, res) => {
     const authUrl = nylas.auth.urlForOAuth2({
       redirectUri: nylasConfig.callbackUri,
       clientId: nylasConfig.clientId,
-      scope: ["email", "calendar", "contacts"],
       state: userId, // To identify the user after callback
       accessType: "offline",
     });
@@ -53,7 +52,7 @@ router.get("/exchange", async (req, res) => {
 
     // Retrieve user's Nylas account details
     const account = await nylas.grants.find({ grantId });
-    const { id, provider, email } = account.data;
+    const { provider, email } = account.data;
 
     // Save Nylas details to Supabase
     const { error } = await supabase.from("user_nylas").upsert(

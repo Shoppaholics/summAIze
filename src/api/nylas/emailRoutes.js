@@ -1,7 +1,7 @@
 import express from "express";
 
-import { supabase } from "../../lib/supabaseClientBackend.js";
 import { nylas, nylasConfig } from "../../lib/nylasClient.js";
+import { supabase } from "../../lib/supabaseClientBackend.js";
 
 const router = express.Router();
 
@@ -39,6 +39,7 @@ router.get("/read", async (req, res) => {
           { emailAddress: email.email, emails: messages, error: null },
         ];
       } catch (error) {
+        console.error(error);
         retrievedEmails = [
           ...retrievedEmails,
           {
