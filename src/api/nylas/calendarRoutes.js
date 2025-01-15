@@ -82,7 +82,15 @@ router.post("/get-events", async (req, res) => {
 
 // Route: Create event for calendar
 router.post("/create-event", async (req, res) => {
-  const { grantId, calendarId, title, description, participants } = req.body;
+  const {
+    grantId,
+    calendarId,
+    title,
+    description,
+    participants,
+    startTime,
+    endTime,
+  } = req.body;
 
   if (!grantId) {
     return res.status(400).json({ error: "Grant ID is required" });
@@ -90,15 +98,14 @@ router.post("/create-event", async (req, res) => {
   if (!calendarId) {
     return res.status(400).json({ error: "Calendar ID is required" });
   }
-  console.log(participants);
   try {
     const event = await nylas.events.create({
       identifier: grantId,
       requestBody: {
         title: title,
         when: {
-          startTime: Math.floor(Date.now() / 1000),
-          endTime: Math.floor(Date.now() / 1000) + 3600,
+          startTime: Math.floor(startTime / 1000),
+          endTime: Math.floor(endTime / 1000),
         },
         description: description,
         participants: participants,
