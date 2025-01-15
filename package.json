@@ -5,6 +5,7 @@
   "private": true,
   "dependencies": {
     "@google-cloud/aiplatform": "^3.34.0",
+    "@google/generative-ai": "^0.21.0",
     "@supabase/supabase-js": "^2.47.12",
     "axios": "^1.7.9",
     "cors": "^2.8.5",

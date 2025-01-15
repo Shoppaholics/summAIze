@@ -11,7 +11,7 @@ export async function summarizeAndExtractWithGemini(emailContent) {
           role: "user",
           parts: [
             {
-                text: "You are an email summarizer. Summarize the email and identify any deadlines, tasks, and key points. Organize them into actionable items." 
+              text: "You are an email summarizer. Summarize the email and identify any deadlines, tasks, and key points. Organize them into actionable items.",
             },
           ],
         },
