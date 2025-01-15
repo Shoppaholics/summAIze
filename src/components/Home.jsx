@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 
 import { supabase } from "../lib/supabaseClientFrontend";
 import { getSession } from "../services/authService";
+//import { fetchEmails } from "../services/emailService";
 import { summarizeEmails } from "../services/geminiService";
 import { connectEmailWithNylas } from "../services/nylasService";
 
@@ -50,6 +51,13 @@ const Home = () => {
       setMessage(error);
     }
   };
+  // // Fetch email threads
+  // const handleFetchEmails = async () => {
+  //   setLoading(true);
+  //   const { emails } = await fetchEmails(user?.id);
+  //   console.log(emails);
+  //   setEmails(emails);
+  // };
 
   // Fetch summarized emails
   const summarizeFetchedEmails = async () => {
