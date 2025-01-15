@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 
-import EventCard from "../components/EventCard";
+import EventCard from "../components/calendar/EventCard";
 import { useAuth } from "../context/AuthContext";
 import { fetchCalendarsWithEvents } from "../services/calendarService";
 
-const TaskPage = () => {
+const Calendar = () => {
   const { session } = useAuth();
   const userId = session?.user?.id;
 
@@ -40,4 +40,4 @@ const TaskPage = () => {
   );
 };
 
-export default TaskPage;
+export default Calendar;
