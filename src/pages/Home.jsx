@@ -192,10 +192,21 @@ const Home = () => {
       <Footer />
     </div>
   ) : (
-    <div>
-      <p>Please sign in to view your dashboard.</p>
-      <Link to="/signin">Sign in</Link>
-      <Link to="/signup">Sign up</Link>
+    <div className="auth-container">
+      <div className="auth-card">
+        <h2 className="auth-header">Welcome to SummAIze</h2>
+        <p className="auth-description">
+          Transform your text and emails into actionable tasks with AI.
+        </p>
+        <div className="auth-buttons">
+          <Link to="/signin" className="auth-button">
+            Sign In
+          </Link>
+          <Link to="/signup" className="auth-button auth-button-secondary">
+            Sign Up
+          </Link>
+        </div>
+      </div>
     </div>
   );
 };
