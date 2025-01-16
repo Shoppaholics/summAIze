@@ -61,6 +61,7 @@ const Home = () => {
 
   // Fetch summarized emails
   const summarizeFetchedEmails = async () => {
+    console.log("Start");
     setLoading(true);
     const { summary } = await summarizeEmails(user?.id);
     console.log(summary);

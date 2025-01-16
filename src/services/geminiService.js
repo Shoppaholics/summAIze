@@ -2,6 +2,7 @@ import { summarizeAndExtractWithGemini } from "../api/geminiai.js";
 
 import { fetchEmails } from "./emailService.js";
 
+console.log("Start:");
 export const summarizeEmails = async (userId) => {
   console.log("SummarizeEmails called with userId:", userId);
   try {
