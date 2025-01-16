@@ -3,19 +3,18 @@ import { Link } from "react-router-dom";
 
 import { supabase } from "../lib/supabaseClientFrontend";
 import { getSession } from "../services/authService";
-//import { fetchEmails } from "../services/emailService";
 import { summarizeEmails } from "../services/geminiService";
 import { connectEmailWithNylas } from "../services/nylasService";
 
 import Footer from "../components/Footer";
 import Header from "../components/Header";
+import Input from "../components/Input";
 import TaskCard from "../components/TaskCard";
 import "../styles/Home.css";
 
 const Home = () => {
   const [user, setUser] = useState(null);
   const [tasks, setTasks] = useState([]);
-  const [emails, setEmails] = useState(null);
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState(null);
   const [connectedEmails, setConnectedEmails] = useState(null);
@@ -90,21 +89,34 @@ const Home = () => {
       setMessage(error);
     }
   };
-  // // Fetch email threads
-  // const handleFetchEmails = async () => {
-  //   setLoading(true);
-  //   const { emails } = await fetchEmails(user?.id);
-  //   console.log(emails);
-  //   setEmails(emails);
-  // };
 
   // Fetch summarized emails
   const summarizeFetchedEmails = async () => {
     setLoading(true);
-    const { summary } = await summarizeEmails(user?.id);
-    console.log(summary);
-    setEmails(summary);
-    setLoading(false);
+    try {
+      const { summary } = await summarizeEmails(user?.id);
+      // Instead of storing emails state, directly add tasks from the summary
+      if (summary) {
+        const { data, error } = await supabase
+          .from("tasks")
+          .insert(
+            summary.map((email) => ({
+              content: `Email from ${email.from}: ${email.subject}\n${email.snippet}`,
+              created_at: new Date(),
+              user_id: user.id,
+            }))
+          )
+          .select();
+
+        if (error) throw error;
+        setTasks((prevTasks) => [...prevTasks, ...data]);
+      }
+    } catch (error) {
+      console.error("Error fetching and processing emails:", error);
+      setMessage("Failed to fetch and process emails");
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleSignOut = async () => {
@@ -112,16 +124,58 @@ const Home = () => {
     setUser(null);
   };
 
-  return user ? (
-    <div>
-      <Header />
-      <h2>Welcome, {user.email}</h2>
-      <p>
-        Connected emails: {connectedEmails?.map((item) => item.email + " | ")}
-      </p>
-      <p> The following are the tasks that you have now. </p>
+  // Add task function
+  const addTask = async (newTask) => {
+    try {
+      if (!user) throw new Error("User not logged in");
+      const { data, error } = await supabase
+        .from("tasks")
+        .insert([
+          {
+            content: newTask.content,
+            created_at: new Date(),
+            user_id: user.id,
+          },
+        ])
+        .select();
 
-      <div>
+      if (error) throw error;
+      setTasks((prevTasks) => [...prevTasks, data[0]]);
+    } catch (error) {
+      console.error("Error inserting task:", error.message);
+    }
+  };
+
+  return user ? (
+    <div className="home-container">
+      <Header user={user} />
+
+      <div className="status-bar">
+        <div className="email-status">
+          <p>
+            Connected emails:{" "}
+            {connectedEmails?.map((item) => item.email + " | ")}
+          </p>
+        </div>
+        <div className="action-buttons">
+          <button onClick={handleSignOut} className="action-button">
+            Sign Out
+          </button>
+          <button onClick={connectEmail} className="action-button">
+            Connect email
+          </button>
+          <button
+            onClick={summarizeFetchedEmails}
+            disabled={loading}
+            className="action-button"
+          >
+            Fetch emails
+          </button>
+        </div>
+        {message && <p className="status-message">{message}</p>}
+      </div>
+
+      <div className="main-content">
         <div className="tasks-container">
           {tasks.map((task) => (
             <TaskCard
@@ -134,29 +188,7 @@ const Home = () => {
         </div>
       </div>
 
-      <button onClick={handleSignOut}>Sign Out</button>
-      <div>
-        <button onClick={connectEmail}>Connect email</button>
-        <p>{message}</p>
-        <button onClick={summarizeFetchedEmails} disabled={loading}>
-          Fetch emails
-        </button>
-      </div>
-
-      {emails?.map((item, index) => (
-        <div key={index}>
-          <h3>{item.emailAddress}</h3>
-          <p>{item.error}</p>
-          {item.emails?.data?.map((email, index) => (
-            <div key={index}>
-              <h5>From: {email.from[0]?.name}</h5>
-              <h4>Subject: {email.subject}</h4>
-              <p>Snippet: {email.snippet}</p>
-            </div>
-          ))}
-        </div>
-      ))}
-      <Link to="/summary"> Summarise text into tasks </Link>
+      <Input onAdd={addTask} />
       <Footer />
     </div>
   ) : (
