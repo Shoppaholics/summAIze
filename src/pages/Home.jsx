@@ -1,19 +1,22 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
+import Footer from "../components/Footer";
+import Header from "../components/Header";
+import TaskCard from "../components/TaskCard";
 import { supabase } from "../lib/supabaseClientFrontend";
 import { getSession } from "../services/authService";
-//import { fetchEmails } from "../services/emailService";
+// import { fetchEmails } from "../services/emailService";
 import { summarizeEmails } from "../services/geminiService";
 import { connectEmailWithNylas } from "../services/nylasService";
+import "../styles/Home.css";
 
 const Home = () => {
   const [user, setUser] = useState(null);
+  const [tasks, setTasks] = useState([]);
   const [emails, setEmails] = useState(null);
   const [loading, setLoading] = useState(false);
-
   const [message, setMessage] = useState(null);
-
   const [connectedEmails, setConnectedEmails] = useState(null);
 
   useEffect(() => {
@@ -39,6 +42,41 @@ const Home = () => {
     };
   }, []);
 
+  // Fetch tasks for the logged-in user
+  useEffect(() => {
+    if (user) {
+      fetchTasks();
+    }
+  }, [user]);
+
+  const fetchTasks = async () => {
+    try {
+      const { data, error } = await supabase
+        .from("tasks")
+        .select("*")
+        .eq("user_id", user.id)
+        .order("created_at", { ascending: false });
+
+      if (error) throw error;
+      setTasks(data || []);
+    } catch (error) {
+      console.error("Error fetching tasks:", error.message);
+    }
+  };
+
+  const deleteTask = async (taskId) => {
+    try {
+      const { error } = await supabase.from("tasks").delete().eq("id", taskId);
+
+      if (error) throw error;
+
+      // Refresh tasks after deletion
+      await fetchTasks();
+    } catch (error) {
+      console.error("Error deleting task:", error.message);
+    }
+  };
+
   // Connect user's email via Nylas
   const connectEmail = async () => {
     const { success, error } = await connectEmailWithNylas(user?.id);
@@ -51,7 +89,7 @@ const Home = () => {
       setMessage(error);
     }
   };
-  // // Fetch email threads
+  // // // Fetch email threads
   // const handleFetchEmails = async () => {
   //   setLoading(true);
   //   const { emails } = await fetchEmails(user?.id);
@@ -76,10 +114,26 @@ const Home = () => {
 
   return user ? (
     <div>
+      <Header />
       <h2>Welcome, {user.email}</h2>
       <p>
         Connected emails: {connectedEmails?.map((item) => item.email + " | ")}
       </p>
+      <p> The following are the tasks that you have now. </p>
+
+      <div>
+        <div className="tasks-container">
+          {tasks.map((task) => (
+            <TaskCard
+              key={task.id}
+              id={task.id}
+              content={task.content}
+              onDelete={deleteTask}
+            />
+          ))}
+        </div>
+      </div>
+
       <button onClick={handleSignOut}>Sign Out</button>
       <div>
         <button onClick={connectEmail}>Connect email</button>
@@ -97,11 +151,13 @@ const Home = () => {
             <div key={index}>
               <h5>From: {email.from[0]?.name}</h5>
               <h4>Subject: {email.subject}</h4>
-              <p>Snippet: {email.snippet}</p>
+              <p>Summary: {email.summary}</p>
             </div>
           ))}
         </div>
       ))}
+      <Link to="/summary"> Summarise text into tasks </Link>
+      <Footer />
     </div>
   ) : (
     <div>
