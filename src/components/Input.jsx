@@ -1,8 +1,11 @@
+/* eslint-disable react/prop-types */
 import React, { useState, useRef, useEffect } from "react";
+
+import PropTypes from "prop-types";
 
 import { generateTasks } from "../api/geminiai";
 
-function Input(props) {
+function Input({ onAdd }) {
   const [inputText, setInputText] = useState("");
   const [isGenerating, setIsGenerating] = useState(false);
   const textareaRef = useRef(null);
@@ -22,7 +25,9 @@ function Input(props) {
   }
 
   async function submitText(event) {
-    event.preventDefault();
+    // Prevent form submission if it's a form submit event
+    if (event) event.preventDefault();
+
     if (inputText.trim()) {
       setIsGenerating(true);
       try {
@@ -41,6 +46,15 @@ function Input(props) {
     }
   }
 
+  // Handle enter key press
+  function handleKeyPress(event) {
+    // Check if Enter was pressed without Shift key
+    if (event.key === "Enter" && !event.shiftKey) {
+      event.preventDefault(); // Prevent default enter behavior
+      submitText();
+    }
+  }
+
   return (
     <div className="input-container">
       <textarea
@@ -56,5 +70,9 @@ function Input(props) {
     </div>
   );
 }
+
+Input.propTypes = {
+  onAdd: PropTypes.func.isRequired,
+};
 
 export default Input;
