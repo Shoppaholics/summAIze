@@ -57,7 +57,7 @@ const Calendar = () => {
               </button>
             </div>
 
-            <div className="h-80">
+            <div className="">
               {showCreateEventMenu ? (
                 <CreateEventMenu
                   calendars={calendars?.map((provider) => ({
@@ -100,7 +100,7 @@ const Calendar = () => {
 
           <div className="mt-5 space-y-5">
             {calendars?.map((provider, index) => (
-              <div key={index} className="space-y-3 border-b-4">
+              <div key={index} className="space-y-7 border-b-4 pb-4">
                 <div className="flex flex-row space-x-3 items-center mb-3">
                   <p className="text-xl ">
                     {capitaliseFirstLetter(provider.provider)}

@@ -161,7 +161,7 @@ const CreateEventMenu = ({ calendars }) => {
       {showCheckAvailabilitiesMenu && (
         <form
           action={handleCheckAvailability}
-          className="flex flex-row items-center relative bottom-10 left-3"
+          className="h-3 flex flex-row items-center relative bottom-8 left-3"
         >
           <p className="bg-gray-100 p-1 px-2 rounded-md ml-4 mr-2 text-sm">
             Start
@@ -199,16 +199,25 @@ const CreateEventMenu = ({ calendars }) => {
       )}
 
       {availabilities && (
-        <div className="space-x-2">
-          {availabilities.length > 0 ? (
-            availabilities.map((availability, index) => (
-              <span key={index} className="bg-gray-100 p-1">
-                {new Date(availability.startTime * 1000).toLocaleString()}
-              </span>
-            ))
-          ) : (
-            <p>No timeslots where all participants are available</p>
-          )}
+        <div className="px-4">
+          <p className="font-medium">Free timeslots for all participants</p>
+          <div className="flex flex-wrap flex-row gap-3 items-center">
+            {availabilities.length > 0 ? (
+              availabilities.map((availability, index) => (
+                <p key={index} className="bg-gray-50 p-1 rounded-md text-sm">
+                  {new Date(availability.startTime * 1000)
+                    .toLocaleString()
+                    .slice(0, -3)}{" "}
+                  ~{" "}
+                  {new Date(availability.endTime * 1000)
+                    .toLocaleString()
+                    .slice(0, -3)}
+                </p>
+              ))
+            ) : (
+              <p>No timeslots where all participants are available</p>
+            )}
+          </div>
         </div>
       )}
 
