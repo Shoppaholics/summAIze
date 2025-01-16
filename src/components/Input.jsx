@@ -1,7 +1,6 @@
-/* eslint-disable react/prop-types */
-import React, { useState, useRef, useEffect } from "react";
-
+/* eslint-disable */
 import PropTypes from "prop-types";
+import React, { useState, useRef, useEffect } from "react";
 
 import { generateTasks } from "../api/geminiai";
 
@@ -57,23 +56,16 @@ function Input({ onAdd }) {
 
   return (
     <div className="input-container">
-      <div className="textarea-wrapper">
-        <textarea
-          ref={textareaRef}
-          name="content"
-          placeholder="Enter text to summarize... (Press Enter to submit)"
-          value={inputText}
-          onChange={handleChange}
-          onKeyPress={handleKeyPress}
-        />
-        <button
-          onClick={submitText}
-          disabled={isGenerating || !inputText.trim()}
-          className="submit-button"
-        >
-          {isGenerating ? "..." : "+"}
-        </button>
-      </div>
+      <textarea
+        ref={textareaRef}
+        name="content"
+        placeholder="Enter text to summarize..."
+        value={inputText}
+        onChange={handleChange}
+      />
+      <button onClick={submitText} disabled={isGenerating || !inputText.trim()}>
+        {isGenerating ? "..." : "+"}
+      </button>
     </div>
   );
 }

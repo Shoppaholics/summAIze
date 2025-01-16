@@ -55,6 +55,58 @@ export const fetchCalendarsWithEvents = async (userId) => {
   }
 };
 
+export const createTaskForCalendar = async (
+  title,
+  description,
+  startTime,
+  calendarId,
+  grantId
+) => {
+  try {
+    await axios.post("http://localhost:3001/nylas/calendar/create-task", {
+      grantId: grantId,
+      calendarId: calendarId,
+      title: title,
+      description: description,
+      startTime: startTime,
+    });
+  } catch (error) {
+    console.error("Error creating task for calendar:", error);
+    throw error;
+  }
+};
+
+export const createTaskForCalendars = async (formData, calendars) => {
+  const { title, description, startDateTime } = Object.fromEntries(
+    formData.entries()
+  );
+
+  if (calendars.length < 1) {
+    return { status: "Please select one or more calendars" };
+  }
+
+  const startTime = Math.floor(Date.parse(startDateTime) / 1000);
+
+  try {
+    await Promise.all(
+      calendars.map((calendar) =>
+        createTaskForCalendar(
+          title.trim(),
+          description.trim(),
+          startTime,
+          calendar.id,
+          calendar.grantId
+        )
+      )
+    );
+
+    return { status: "Successfully added task to selected calendars" };
+  } catch (error) {
+    console.error(error);
+    return { status: "Error adding task to one or more calendars" };
+  }
+};
+
 export const createEventForCalendar = async (
   title,
   description,
@@ -83,7 +135,6 @@ export const createEventForCalendar = async (
 export const createEventForCalendars = async (formData, calendars) => {
   const { title, description, startDateTime, endDateTime, participants } =
     Object.fromEntries(formData.entries());
-  console.log(title, description, startDateTime, endDateTime, participants);
 
   if (calendars.length < 1) {
     return { status: "Please select one or more calendars" };
@@ -122,5 +173,65 @@ export const createEventForCalendars = async (formData, calendars) => {
   } catch (error) {
     console.error(error);
     return { status: "Error adding event to one or more calendars" };
+  }
+};
+
+export const checkCalendarAvailability = async (formData, participants) => {
+  const { startDateTime, endDateTime, duration } = Object.fromEntries(
+    formData.entries()
+  );
+  const startTime = Math.floor(Date.parse(startDateTime) / 1000);
+  const endTime = Math.floor(Date.parse(endDateTime) / 1000);
+
+  if (startTime % 300 !== 0 || endTime % 300 !== 0) {
+    return {
+      status: "Start time and End time must be a mulitple of 5 minutes",
+    };
+  }
+
+  if (parseInt(duration) % 5 !== 0) {
+    return {
+      status: "Duration must be a mulitple of 5 minutes",
+    };
+  }
+
+  if (startTime >= endTime) {
+    return { status: "Start time must be before End time" };
+  }
+
+  const participantsArr = participants.trim()
+    ? participants
+        .trim()
+        .split(/\s+/)
+        .map((participantEmail) => ({ email: participantEmail }))
+    : [];
+
+  if (participantsArr.length < 1) {
+    return { status: "please enter at least one participant" };
+  }
+
+  try {
+    const response = await axios.post(
+      "http://localhost:3001/nylas/calendar/check-availability",
+      {
+        startTime: startTime,
+        endTime: endTime,
+        duration: parseInt(duration),
+        participants: participantsArr,
+      }
+    );
+
+    const timeSlots = response.data.timeSlots;
+    const commonTimeSlots = timeSlots.filter(
+      (timeSlot) => timeSlot.emails.length === participantsArr.length
+    );
+
+    return {
+      availabilities: commonTimeSlots,
+      status: "Successfully checked availability",
+    };
+  } catch (error) {
+    console.error("Error checking availability for participants:", error);
+    return { status: "Something went wrong" };
   }
 };

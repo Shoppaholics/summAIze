@@ -3,17 +3,12 @@ import { Link } from "react-router-dom";
 
 import Footer from "../components/Footer";
 import Header from "../components/Header";
+import Input from "../components/Input";
 import TaskCard from "../components/TaskCard";
 import { supabase } from "../lib/supabaseClientFrontend";
 import { getSession } from "../services/authService";
-
 import { summarizeEmails } from "../services/geminiService";
 import { connectEmailWithNylas } from "../services/nylasService";
-
-import Footer from "../components/Footer";
-import Header from "../components/Header";
-import Input from "../components/Input";
-import TaskCard from "../components/TaskCard";
 import "../styles/Home.css";
 
 const Home = () => {
@@ -93,7 +88,6 @@ const Home = () => {
       setMessage(error);
     }
   };
-
 
   // Fetch summarized emails
   const summarizeFetchedEmails = async () => {
