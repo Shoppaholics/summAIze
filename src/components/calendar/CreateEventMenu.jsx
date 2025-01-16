@@ -1,12 +1,17 @@
 import PropTypes from "prop-types";
 import React, { useEffect, useState } from "react";
 
-import { createEventForCalendars } from "../../services/calendarService";
+import {
+  checkCalendarAvailability,
+  createEventForCalendars,
+} from "../../services/calendarService";
 import { capitaliseFirstLetter } from "../../utils";
 
 const CreateEventMenu = ({ calendars }) => {
   const [selectedCalendars, setSelectedCalendars] = useState(null);
   const [status, setStatus] = useState(null);
+
+  const [participants, setParticipants] = useState("");
 
   useEffect(() => {
     if (!calendars) {
@@ -26,6 +31,12 @@ const CreateEventMenu = ({ calendars }) => {
 
   const handleSubmit = async (e) => {
     const { status } = await createEventForCalendars(e, selectedCalendars);
+    setStatus(status);
+  };
+
+  const handleCheckAvailability = async (e) => {
+    console.log(e);
+    const { status } = await checkCalendarAvailability(e, participants);
     setStatus(status);
   };
 
@@ -111,6 +122,8 @@ const CreateEventMenu = ({ calendars }) => {
             id="participants"
             name="participants"
             placeholder="Enter participants' email separated by a space"
+            value={participants}
+            onChange={(e) => setParticipants(e.target.value)}
             className="min-w-96"
           />
         </div>
@@ -120,6 +133,31 @@ const CreateEventMenu = ({ calendars }) => {
         >
           Create event
         </button>
+      </form>
+
+      <form action={handleCheckAvailability} className="space-x-2">
+        <label>Start date & time:</label>
+        <input
+          type="datetime-local"
+          name="startDateTime"
+          placeholder="start time"
+          required
+        />
+        <label>End date & time:</label>
+        <input
+          type="datetime-local"
+          name="endDateTime"
+          placeholder="end time"
+          required
+        />
+        <label>Duration:</label>
+        <input
+          type="number"
+          name="duration"
+          placeholder="Enter duration in mins"
+          required
+        />
+        <button type="submit">Check avail</button>
       </form>
 
       <p>{status}</p>

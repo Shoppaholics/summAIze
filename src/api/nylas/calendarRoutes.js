@@ -122,4 +122,37 @@ router.post("/create-event", async (req, res) => {
   }
 });
 
+// Route: Check availability for all participants
+router.post("/check-availability", async (req, res) => {
+  const { participants, startTime, endTime, duration } = req.body;
+
+  if (!participants) {
+    return res.status(400).json({ error: "Participants required" });
+  }
+  if (!startTime || !endTime) {
+    return res.status(400).json({ error: "Start time and End time required" });
+  }
+  if (!duration) {
+    return res
+      .status(400)
+      .json({ error: "Duration to check availability for is required" });
+  }
+
+  try {
+    const calendar = await nylas.calendars.getAvailability({
+      requestBody: {
+        startTime: startTime,
+        endTime: endTime,
+        duration_minutes: duration,
+        participants: participants,
+      },
+    });
+
+    return res.status(200).json(calendar);
+  } catch (error) {
+    console.error("Error checking availability for participants:", error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
 export default router;

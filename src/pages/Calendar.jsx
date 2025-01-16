@@ -27,7 +27,7 @@ const Calendar = () => {
   };
 
   return (
-    <div className="p-5">
+    <div className="min-h-screen p-5 bg-white">
       <p className="font-bold text-3xl">Calendar</p>
       {loading ? (
         <p>Loading calendars...</p>
