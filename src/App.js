@@ -1,6 +1,7 @@
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
+import TextToTask from "./components/TextToTask.jsx";
 import { AuthProvider } from "./context/AuthContext.js";
 import Calendar from "./pages/Calendar.jsx";
 import Home from "./pages/Home.jsx";

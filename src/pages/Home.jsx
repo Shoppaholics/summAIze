@@ -1,8 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
+import Footer from "../components/Footer";
+import Header from "../components/Header";
+import TaskCard from "../components/TaskCard";
 import { supabase } from "../lib/supabaseClientFrontend";
 import { getSession } from "../services/authService";
+
 import { summarizeEmails } from "../services/geminiService";
 import { connectEmailWithNylas } from "../services/nylasService";
 
@@ -90,8 +94,10 @@ const Home = () => {
     }
   };
 
+
   // Fetch summarized emails
   const summarizeFetchedEmails = async () => {
+    console.log("Start");
     setLoading(true);
     try {
       const { summary } = await summarizeEmails(user?.id);

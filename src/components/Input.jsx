@@ -1,5 +1,8 @@
+/* eslint-disable react/prop-types */
 import React, { useState, useRef, useEffect } from "react";
+
 import PropTypes from "prop-types";
+
 import { generateTasks } from "../api/geminiai";
 
 function Input({ onAdd }) {
@@ -31,7 +34,7 @@ function Input({ onAdd }) {
         const generatedTasks = await generateTasks(inputText);
 
         generatedTasks.forEach((taskContent) => {
-          onAdd({ content: taskContent });
+          props.onAdd({ content: taskContent });
         });
 
         setInputText("");

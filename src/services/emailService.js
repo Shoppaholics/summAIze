@@ -6,7 +6,9 @@ export const fetchEmails = async (userId) => {
       params: { userId },
     });
 
-    return { emails: response.data };
+    const { connectedEmails } = response.data;
+    console.log("Email format: ", connectedEmails);
+    return { connectedEmails: response.data };
   } catch (error) {
     console.error(error);
     return { error: "Error fetching emails" };
