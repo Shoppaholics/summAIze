@@ -1,17 +1,12 @@
 import PropTypes from "prop-types";
 import React, { useEffect, useState } from "react";
 
-import {
-  checkCalendarAvailability,
-  createEventForCalendars,
-} from "../../services/calendarService";
+import { createTaskForCalendars } from "../../services/calendarService";
 import { capitaliseFirstLetter } from "../../utils";
 
-const CreateEventMenu = ({ calendars }) => {
+const CreateTaskMenu = ({ calendars }) => {
   const [selectedCalendars, setSelectedCalendars] = useState(null);
   const [status, setStatus] = useState(null);
-
-  const [participants, setParticipants] = useState("");
 
   useEffect(() => {
     if (!calendars) {
@@ -30,28 +25,15 @@ const CreateEventMenu = ({ calendars }) => {
   };
 
   const handleSubmit = async (e) => {
-    const { status } = await createEventForCalendars(e, selectedCalendars);
+    const { status } = await createTaskForCalendars(e, selectedCalendars);
     setStatus(status);
-  };
-
-  const handleCheckAvailability = async (e) => {
-    console.log(e);
-    const { status, availability } = await checkCalendarAvailability(
-      e,
-      participants
-    );
-    setStatus(status);
-
-    if (availability) {
-      return;
-    }
   };
 
   return (
     <div className="border-b-2 mt-3 mb-8 py-3">
-      <p className="text-base font-bold">Add event to calendar</p>
+      <p className="text-base font-bold">Add task to calendar</p>
 
-      {/* Panel to select calendars to add event to */}
+      {/* Panel to select calendars to add task to */}
       <div className="flex flex-row space-x-5">
         {calendars?.map((provider) => (
           <div key={provider.email}>
@@ -105,7 +87,7 @@ const CreateEventMenu = ({ calendars }) => {
           />
         </div>
         <div className="space-x-2">
-          <label htmlFor="startDateTime">Start date & time:</label>
+          <label htmlFor="startDateTime">Date & Time:</label>
           <input
             type="datetime-local"
             id="startDateTime"
@@ -113,58 +95,13 @@ const CreateEventMenu = ({ calendars }) => {
             placeholder="start time"
             required
           />
-          <label htmlFor="endDateTime">End date & time:</label>
-          <input
-            type="datetime-local"
-            id="endDateTime"
-            name="endDateTime"
-            placeholder="end time"
-            required
-          />
-        </div>
-        <div className="space-x-2">
-          <label htmlFor="participants">Participants:</label>
-          <input
-            type="text"
-            id="participants"
-            name="participants"
-            placeholder="Enter participants' email separated by a space"
-            value={participants}
-            onChange={(e) => setParticipants(e.target.value)}
-            className="min-w-96"
-          />
         </div>
         <button
           type="submit"
           className="self-start bg-blue-100 py-1 px-2 rounded-md"
         >
-          Create event
+          Add task
         </button>
-      </form>
-
-      <form action={handleCheckAvailability} className="space-x-2">
-        <label>Start date & time:</label>
-        <input
-          type="datetime-local"
-          name="startDateTime"
-          placeholder="start time"
-          required
-        />
-        <label>End date & time:</label>
-        <input
-          type="datetime-local"
-          name="endDateTime"
-          placeholder="end time"
-          required
-        />
-        <label>Duration:</label>
-        <input
-          type="number"
-          name="duration"
-          placeholder="Enter duration in mins"
-          required
-        />
-        <button type="submit">Check avail</button>
       </form>
 
       <p>{status}</p>
@@ -172,8 +109,8 @@ const CreateEventMenu = ({ calendars }) => {
   );
 };
 
-CreateEventMenu.propTypes = {
+CreateTaskMenu.propTypes = {
   calendars: PropTypes.object.isRequired,
 };
 
-export default CreateEventMenu;
+export default CreateTaskMenu;

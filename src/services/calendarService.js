@@ -55,6 +55,58 @@ export const fetchCalendarsWithEvents = async (userId) => {
   }
 };
 
+export const createTaskForCalendar = async (
+  title,
+  description,
+  startTime,
+  calendarId,
+  grantId
+) => {
+  try {
+    await axios.post("http://localhost:3001/nylas/calendar/create-task", {
+      grantId: grantId,
+      calendarId: calendarId,
+      title: title,
+      description: description,
+      startTime: startTime,
+    });
+  } catch (error) {
+    console.error("Error creating task for calendar:", error);
+    throw error;
+  }
+};
+
+export const createTaskForCalendars = async (formData, calendars) => {
+  const { title, description, startDateTime } = Object.fromEntries(
+    formData.entries()
+  );
+
+  if (calendars.length < 1) {
+    return { status: "Please select one or more calendars" };
+  }
+
+  const startTime = Math.floor(Date.parse(startDateTime) / 1000);
+
+  try {
+    await Promise.all(
+      calendars.map((calendar) =>
+        createTaskForCalendar(
+          title.trim(),
+          description.trim(),
+          startTime,
+          calendar.id,
+          calendar.grantId
+        )
+      )
+    );
+
+    return { status: "Successfully added task to selected calendars" };
+  } catch (error) {
+    console.error(error);
+    return { status: "Error adding task to one or more calendars" };
+  }
+};
+
 export const createEventForCalendar = async (
   title,
   description,

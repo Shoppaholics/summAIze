@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 
 import CalendarCard from "../components/calendar/CalendarCard";
 import CreateEventMenu from "../components/calendar/CreateEventMenu";
+import CreateTaskMenu from "../components/calendar/CreateTaskMenu";
 import { useAuth } from "../context/AuthContext";
 import { fetchCalendarsWithEvents } from "../services/calendarService";
 import { capitaliseFirstLetter } from "../utils";
@@ -33,6 +34,19 @@ const Calendar = () => {
         <p>Loading calendars...</p>
       ) : (
         <>
+          <CreateTaskMenu
+            calendars={calendars?.map((provider) => ({
+              email: provider.email,
+              provider: provider.provider,
+              calendars: provider.calendars
+                ?.filter((calendar) => !calendar.readOnly)
+                .map((calendar) => ({
+                  name: calendar.name,
+                  id: calendar.id,
+                  grantId: calendar.grantId,
+                })),
+            }))}
+          />
           <CreateEventMenu
             calendars={calendars?.map((provider) => ({
               email: provider.email,
