@@ -158,9 +158,9 @@ const Home = () => {
           </p>
         </div>
         <div className="action-buttons">
-          <button onClick={handleSignOut} className="action-button">
-            Sign Out
-          </button>
+          <Link to="/calendar" className="action-button">
+            Calendar
+          </Link>
           <button onClick={connectEmail} className="action-button">
             Connect email
           </button>
@@ -170,6 +170,9 @@ const Home = () => {
             className="action-button"
           >
             Fetch emails
+          </button>
+          <button onClick={handleSignOut} className="action-button sign-out">
+            Sign Out
           </button>
         </div>
         {message && <p className="status-message">{message}</p>}
