@@ -1,7 +1,6 @@
-/* eslint-disable react/prop-types */
-import React, { useState, useRef, useEffect } from "react";
-
+/* eslint-disable */
 import PropTypes from "prop-types";
+import React, { useState, useRef, useEffect } from "react";
 
 import { generateTasks } from "../api/geminiai";
 
