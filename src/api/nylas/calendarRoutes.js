@@ -180,7 +180,7 @@ router.post("/check-availability", async (req, res) => {
       },
     });
 
-    return res.status(200).json(calendar);
+    return res.status(200).json(calendar.data);
   } catch (error) {
     console.error("Error checking availability for participants:", error);
     res.status(500).json({ error: error.message });

@@ -195,7 +195,7 @@ export const checkCalendarAvailability = async (formData, participants) => {
     };
   }
 
-  if (startTime > endTime) {
+  if (startTime >= endTime) {
     return { status: "Start time must be before End time" };
   }
 
@@ -205,6 +205,10 @@ export const checkCalendarAvailability = async (formData, participants) => {
         .split(/\s+/)
         .map((participantEmail) => ({ email: participantEmail }))
     : [];
+
+  if (participantsArr.length < 1) {
+    return { status: "please enter at least one participant" };
+  }
 
   try {
     const response = await axios.post(
@@ -216,8 +220,16 @@ export const checkCalendarAvailability = async (formData, participants) => {
         participants: participantsArr,
       }
     );
-    console.log(response);
-    return { status: "Successfully checked availability" };
+
+    const timeSlots = response.data.timeSlots;
+    const commonTimeSlots = timeSlots.filter(
+      (timeSlot) => timeSlot.emails.length === participantsArr.length
+    );
+
+    return {
+      availabilities: commonTimeSlots,
+      status: "Successfully checked availability",
+    };
   } catch (error) {
     console.error("Error checking availability for participants:", error);
     return { status: "Something went wrong" };

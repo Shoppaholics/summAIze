@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 
+import addIcon from "../assets/icons/add.svg";
 import CalendarCard from "../components/calendar/CalendarCard";
 import CreateEventMenu from "../components/calendar/CreateEventMenu";
 import CreateTaskMenu from "../components/calendar/CreateTaskMenu";
@@ -13,6 +14,8 @@ const Calendar = () => {
 
   const [calendars, setCalendars] = useState(null);
   const [loading, setLoading] = useState(true);
+
+  const [showCreateEventMenu, setShowCreateEventMenu] = useState(false);
 
   useEffect(() => {
     handleFetchCalendars();
@@ -34,33 +37,60 @@ const Calendar = () => {
         <p>Loading calendars...</p>
       ) : (
         <>
-          <CreateTaskMenu
-            calendars={calendars?.map((provider) => ({
-              email: provider.email,
-              provider: provider.provider,
-              calendars: provider.calendars
-                ?.filter((calendar) => !calendar.readOnly)
-                .map((calendar) => ({
-                  name: calendar.name,
-                  id: calendar.id,
-                  grantId: calendar.grantId,
-                })),
-            }))}
-          />
-          <CreateEventMenu
-            calendars={calendars?.map((provider) => ({
-              email: provider.email,
-              provider: provider.provider,
-              calendars: provider.calendars
-                ?.filter((calendar) => !calendar.readOnly)
-                .map((calendar) => ({
-                  name: calendar.name,
-                  id: calendar.id,
-                  grantId: calendar.grantId,
-                })),
-            }))}
-          />
+          <div>
+            <div className="flex flex-row border border-neutral-200 w-fit p-3 rounded-xl mt-3">
+              <div className="flex flex-row items-center mr-7">
+                <img src={addIcon} width={24} height={24} />
+                <span className="font-medium text-lg ml-1">Create</span>
+              </div>
+              <button
+                className={`${!showCreateEventMenu ? "bg-blue-500 text-white font-medium" : "hover:bg-gray-100"} mr-3 py-0.5 px-3 rounded-full`}
+                onClick={() => setShowCreateEventMenu(false)}
+              >
+                Task
+              </button>
+              <button
+                className={`${showCreateEventMenu ? "bg-blue-500 text-white font-medium" : "hover:bg-gray-100"} py-0.5 px-3 rounded-full`}
+                onClick={() => setShowCreateEventMenu(true)}
+              >
+                Event
+              </button>
+            </div>
 
+            <div className="h-80">
+              {showCreateEventMenu ? (
+                <CreateEventMenu
+                  calendars={calendars?.map((provider) => ({
+                    email: provider.email,
+                    provider: provider.provider,
+                    calendars: provider.calendars
+                      ?.filter((calendar) => !calendar.readOnly)
+                      .map((calendar) => ({
+                        name: calendar.name,
+                        id: calendar.id,
+                        grantId: calendar.grantId,
+                      })),
+                  }))}
+                />
+              ) : (
+                <CreateTaskMenu
+                  calendars={calendars?.map((provider) => ({
+                    email: provider.email,
+                    provider: provider.provider,
+                    calendars: provider.calendars
+                      ?.filter((calendar) => !calendar.readOnly)
+                      .map((calendar) => ({
+                        name: calendar.name,
+                        id: calendar.id,
+                        grantId: calendar.grantId,
+                      })),
+                  }))}
+                />
+              )}
+            </div>
+          </div>
+
+          <div className="h-1 bg-gray-200 rounded-full mb-6" />
           <button
             onClick={handleFetchCalendars}
             className="bg-gray-100 p-2 rounded-lg"

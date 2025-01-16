@@ -1,6 +1,10 @@
 import PropTypes from "prop-types";
 import React, { useEffect, useState } from "react";
 
+import descriptionIcon from "../../assets/icons/description.svg";
+import participantsIcon from "../../assets/icons/participants.svg";
+import timeIcon from "../../assets/icons/time.svg";
+import titleIcon from "../../assets/icons/title.svg";
 import {
   checkCalendarAvailability,
   createEventForCalendars,
@@ -12,6 +16,9 @@ const CreateEventMenu = ({ calendars }) => {
   const [status, setStatus] = useState(null);
 
   const [participants, setParticipants] = useState("");
+  const [availabilities, setAvailabiliies] = useState(null);
+  const [showCheckAvailabilitiesMenu, setShowCheckAvailabilitiesMenu] =
+    useState(false);
 
   useEffect(() => {
     if (!calendars) {
@@ -35,24 +42,18 @@ const CreateEventMenu = ({ calendars }) => {
   };
 
   const handleCheckAvailability = async (e) => {
-    console.log(e);
-    const { status, availability } = await checkCalendarAvailability(
+    const { status, availabilities } = await checkCalendarAvailability(
       e,
       participants
     );
     setStatus(status);
-
-    if (availability) {
-      return;
-    }
+    setAvailabiliies(availabilities);
   };
 
   return (
-    <div className="border-b-2 mt-3 mb-8 py-3">
-      <p className="text-base font-bold">Add event to calendar</p>
-
+    <div className="py-3">
       {/* Panel to select calendars to add event to */}
-      <div className="flex flex-row space-x-5">
+      <div className="flex flex-row space-x-5 px-2 mb-3">
         {calendars?.map((provider) => (
           <div key={provider.email}>
             <p className="font-medium mb-1">
@@ -84,46 +85,52 @@ const CreateEventMenu = ({ calendars }) => {
         ))}
       </div>
 
-      <form action={handleSubmit} className="flex flex-col space-y-2 mt-4">
-        <div className="space-x-2">
-          <label htmlFor="title">Title</label>
+      <form action={handleSubmit} className="flex flex-col space-y-4 p-2">
+        <div className="space-x-3 flex flex-row items-center">
+          <img src={titleIcon} width={24} height={24} />
           <input
             type="text"
-            id="title"
             name="title"
             placeholder="Enter event title"
             required
+            className="p-1"
           />
         </div>
-        <div className="space-x-2">
-          <label htmlFor="description">Description</label>
+
+        <div className="space-x-3 flex flex-row items-center">
+          <img src={descriptionIcon} width={24} height={24} />
           <input
             type="text"
-            id="description"
             name="description"
             placeholder="Enter event description"
+            className="p-1"
           />
         </div>
-        <div className="space-x-2">
-          <label htmlFor="startDateTime">Start date & time:</label>
+
+        <div className="flex flex-row items-center">
+          <img src={timeIcon} width={24} height={24} />
+          <p className="bg-gray-100 p-1 px-2 rounded-md ml-4 mr-2 text-sm">
+            Start
+          </p>
           <input
             type="datetime-local"
-            id="startDateTime"
             name="startDateTime"
             placeholder="start time"
             required
           />
-          <label htmlFor="endDateTime">End date & time:</label>
+          <p className="bg-gray-100 p-1 px-2 rounded-md ml-6 mr-2 text-sm">
+            End
+          </p>
           <input
             type="datetime-local"
-            id="endDateTime"
             name="endDateTime"
             placeholder="end time"
             required
           />
         </div>
-        <div className="space-x-2">
-          <label htmlFor="participants">Participants:</label>
+
+        <div className="space-x-3 flex flex-row">
+          <img src={participantsIcon} width={24} height={24} />
           <input
             type="text"
             id="participants"
@@ -131,41 +138,79 @@ const CreateEventMenu = ({ calendars }) => {
             placeholder="Enter participants' email separated by a space"
             value={participants}
             onChange={(e) => setParticipants(e.target.value)}
-            className="min-w-96"
+            className="min-w-96 p-1"
           />
+          <button
+            onClick={() =>
+              setShowCheckAvailabilitiesMenu(!showCheckAvailabilitiesMenu)
+            }
+            type="button"
+            className="p-1 px-2 bg-blue-100 rounded-full text-sm hover:bg-opacity-40"
+          >
+            Check availability
+          </button>
         </div>
         <button
           type="submit"
-          className="self-start bg-blue-100 py-1 px-2 rounded-md"
+          className="self-end bg-blue-500 py-1 px-2 rounded-md text-white font-medium hover:bg-opacity-50"
         >
-          Create event
+          create
         </button>
       </form>
 
-      <form action={handleCheckAvailability} className="space-x-2">
-        <label>Start date & time:</label>
-        <input
-          type="datetime-local"
-          name="startDateTime"
-          placeholder="start time"
-          required
-        />
-        <label>End date & time:</label>
-        <input
-          type="datetime-local"
-          name="endDateTime"
-          placeholder="end time"
-          required
-        />
-        <label>Duration:</label>
-        <input
-          type="number"
-          name="duration"
-          placeholder="Enter duration in mins"
-          required
-        />
-        <button type="submit">Check avail</button>
-      </form>
+      {showCheckAvailabilitiesMenu && (
+        <form
+          action={handleCheckAvailability}
+          className="flex flex-row items-center relative bottom-10 left-3"
+        >
+          <p className="bg-gray-100 p-1 px-2 rounded-md ml-4 mr-2 text-sm">
+            Start
+          </p>
+          <input
+            type="datetime-local"
+            name="startDateTime"
+            placeholder="start time"
+            required
+          />
+          <p className="bg-gray-100 p-1 px-2 rounded-md ml-6 mr-2 text-sm">
+            End
+          </p>
+          <input
+            type="datetime-local"
+            name="endDateTime"
+            placeholder="end time"
+            required
+          />
+
+          <input
+            type="number"
+            name="duration"
+            placeholder="Duration"
+            required
+            className="ml-3 w-20"
+          />
+          <button
+            type="submit"
+            className="bg-green-600 text-white text-sm font-medium px-2 py-1 rounded-lg ml-5 hover:bg-opacity-50"
+          >
+            Check
+          </button>
+        </form>
+      )}
+
+      {availabilities && (
+        <div className="space-x-2">
+          {availabilities.length > 0 ? (
+            availabilities.map((availability, index) => (
+              <span key={index} className="bg-gray-100 p-1">
+                {new Date(availability.startTime * 1000).toLocaleString()}
+              </span>
+            ))
+          ) : (
+            <p>No timeslots where all participants are available</p>
+          )}
+        </div>
+      )}
 
       <p>{status}</p>
     </div>

@@ -1,6 +1,9 @@
 import PropTypes from "prop-types";
 import React, { useEffect, useState } from "react";
 
+import descriptionIcon from "../../assets/icons/description.svg";
+import timeIcon from "../../assets/icons/time.svg";
+import titleIcon from "../../assets/icons/title.svg";
 import { createTaskForCalendars } from "../../services/calendarService";
 import { capitaliseFirstLetter } from "../../utils";
 
@@ -30,11 +33,9 @@ const CreateTaskMenu = ({ calendars }) => {
   };
 
   return (
-    <div className="border-b-2 mt-3 mb-8 py-3">
-      <p className="text-base font-bold">Add task to calendar</p>
-
+    <div className="py-3">
       {/* Panel to select calendars to add task to */}
-      <div className="flex flex-row space-x-5">
+      <div className="flex flex-row space-x-5 px-2 mb-3">
         {calendars?.map((provider) => (
           <div key={provider.email}>
             <p className="font-medium mb-1">
@@ -66,41 +67,45 @@ const CreateTaskMenu = ({ calendars }) => {
         ))}
       </div>
 
-      <form action={handleSubmit} className="flex flex-col space-y-2 mt-4">
-        <div className="space-x-2">
-          <label htmlFor="title">Title</label>
+      <form action={handleSubmit} className="flex flex-col space-y-4 p-2">
+        <div className="space-x-3 flex flex-row items-center">
+          <img src={titleIcon} width={24} height={24} />
           <input
             type="text"
-            id="title"
             name="title"
             placeholder="Enter event title"
             required
+            className="p-1"
           />
         </div>
-        <div className="space-x-2">
-          <label htmlFor="description">Description</label>
+        <div className="space-x-3 flex flex-row items-center">
+          <img src={descriptionIcon} width={24} height={24} />
           <input
             type="text"
-            id="description"
             name="description"
             placeholder="Enter event description"
+            className="p-1"
           />
         </div>
-        <div className="space-x-2">
-          <label htmlFor="startDateTime">Date & Time:</label>
+
+        <div className="flex flex-row items-center">
+          <img src={timeIcon} width={24} height={24} />
+          <p className="bg-gray-100 p-1 px-2 rounded-md ml-4 mr-2 text-sm">
+            Time
+          </p>
           <input
             type="datetime-local"
-            id="startDateTime"
             name="startDateTime"
             placeholder="start time"
             required
           />
         </div>
+
         <button
           type="submit"
-          className="self-start bg-blue-100 py-1 px-2 rounded-md"
+          className="self-end bg-blue-500 py-1 px-2 rounded-md text-white font-medium hover:bg-opacity-50"
         >
-          Add task
+          Add
         </button>
       </form>
 
