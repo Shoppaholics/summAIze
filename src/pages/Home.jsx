@@ -1,15 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
+import Footer from "../components/Footer";
+import Header from "../components/Header";
+import TaskCard from "../components/TaskCard";
 import { supabase } from "../lib/supabaseClientFrontend";
 import { getSession } from "../services/authService";
 //import { fetchEmails } from "../services/emailService";
 import { summarizeEmails } from "../services/geminiService";
 import { connectEmailWithNylas } from "../services/nylasService";
-
-import Footer from "../components/Footer";
-import Header from "../components/Header";
-import TaskCard from "../components/TaskCard";
 import "../styles/Home.css";
 
 const Home = () => {

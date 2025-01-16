@@ -34,7 +34,7 @@ export async function summarizeAndExtractWithGemini(emailContent) {
 export async function generateTasks(text) {
   try {
     const model = gemini.getGenerativeModel({ model: "gemini-1.5-pro" });
-    
+
     const prompt = `Summarize the following text into 1-3 concise, actionable tasks. Each task should be in the format of "[TASK TITLE]: [ACTION] with [WHO]".
                     [TASK TITLE] Include main task name which should be the same for all tasks. Include a subtask name if applicable. Connect the two with a "->".
                     [ACTION] single verb or phrase.
@@ -47,14 +47,15 @@ export async function generateTasks(text) {
     const result = await model.generateContent(prompt);
     const response = await result.response;
     console.log(response.text());
-    const tasks = response.text()
-      .split('\n')
-      .filter(task => task.trim().length > 0)
-      .map(task => task.replace(/^\d+\.\s*/, '')); 
+    const tasks = response
+      .text()
+      .split("\n")
+      .filter((task) => task.trim().length > 0)
+      .map((task) => task.replace(/^\d+\.\s*/, ""));
 
     return tasks;
   } catch (error) {
-    console.error('Error generating tasks:', error);
+    console.error("Error generating tasks:", error);
     return [];
   }
-} 
+}

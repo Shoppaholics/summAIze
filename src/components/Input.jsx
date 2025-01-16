@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
+
 import { generateTasks } from "../api/geminiai";
 
 function Input(props) {
@@ -10,7 +11,7 @@ function Input(props) {
   useEffect(() => {
     const textarea = textareaRef.current;
     if (textarea) {
-      textarea.style.height = 'auto';
+      textarea.style.height = "auto";
       const scrollHeight = textarea.scrollHeight;
       textarea.style.height = `${Math.min(scrollHeight, window.innerHeight * 0.3)}px`;
     }
@@ -26,14 +27,14 @@ function Input(props) {
       setIsGenerating(true);
       try {
         const generatedTasks = await generateTasks(inputText);
-        
-        generatedTasks.forEach(taskContent => {
+
+        generatedTasks.forEach((taskContent) => {
           props.onAdd({ content: taskContent });
         });
-        
+
         setInputText("");
       } catch (error) {
-        console.error('Error processing text:', error);
+        console.error("Error processing text:", error);
       } finally {
         setIsGenerating(false);
       }
@@ -49,10 +50,7 @@ function Input(props) {
         value={inputText}
         onChange={handleChange}
       />
-      <button 
-        onClick={submitText} 
-        disabled={isGenerating || !inputText.trim()}
-      >
+      <button onClick={submitText} disabled={isGenerating || !inputText.trim()}>
         {isGenerating ? "..." : "+"}
       </button>
     </div>

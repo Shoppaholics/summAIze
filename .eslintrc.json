@@ -20,6 +20,7 @@
   },
   "rules": {
     "prettier/prettier": "error",
+    "react/prop-types": "off",
     "import/order": [
       "error",
       {
