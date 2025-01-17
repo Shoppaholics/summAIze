@@ -20,6 +20,7 @@ function TaskCard(props) {
       >
         ×
       </button>
+      {props.children}
     </div>
   );
 }

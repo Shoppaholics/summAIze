@@ -9,6 +9,7 @@ import { supabase } from "../lib/supabaseClientFrontend";
 import { getSession } from "../services/authService";
 import { summarizeEmails } from "../services/geminiService";
 import { connectEmailWithNylas } from "../services/nylasService";
+import LinkToEmail from "../components/LinkToEmail";
 import "../styles/Home.css";
 
 const Home = () => {
@@ -91,25 +92,35 @@ const Home = () => {
 
   // Fetch summarized emails
   const summarizeFetchedEmails = async () => {
-    console.log("Start");
     setLoading(true);
+    setMessage("");
     try {
-      const { summary } = await summarizeEmails(user?.id);
-      // Instead of storing emails state, directly add tasks from the summary
-      if (summary) {
-        const { data, error } = await supabase
+      const { summary, error } = await summarizeEmails(user?.id);
+
+      if (error) {
+        setMessage(error);
+        return;
+      }
+
+      if (summary && summary.length > 0) {
+        const { data, error: supabaseError } = await supabase
           .from("tasks")
           .insert(
             summary.map((email) => ({
-              content: `Email from ${email.from}: ${email.subject}\n${email.snippet}`,
+              content: `Email from: ${email.from}\nSubject: ${email.subject}\n\n${email.summary}`,
               created_at: new Date(),
               user_id: user.id,
+              messageurl: email.messageUrl,
+              provider: email.provider,
             }))
           )
           .select();
 
-        if (error) throw error;
+        if (supabaseError) throw supabaseError;
         setTasks((prevTasks) => [...prevTasks, ...data]);
+        setMessage("Emails successfully converted to tasks!");
+      } else {
+        setMessage("No new emails to process");
       }
     } catch (error) {
       console.error("Error fetching and processing emails:", error);
@@ -186,7 +197,14 @@ const Home = () => {
               id={task.id}
               content={task.content}
               onDelete={deleteTask}
-            />
+            >
+              {task.messageurl && (
+                <LinkToEmail
+                  messageUrl={task.messageurl}
+                  provider={task.provider}
+                />
+              )}
+            </TaskCard>
           ))}
         </div>
       </div>

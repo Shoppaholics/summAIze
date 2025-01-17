@@ -4,7 +4,7 @@ import React, { useState, useRef, useEffect } from "react";
 
 import { generateTasks } from "../api/geminiai";
 
-function Input({ onAdd }) {
+function Input(props) {
   const [inputText, setInputText] = useState("");
   const [isGenerating, setIsGenerating] = useState(false);
   const textareaRef = useRef(null);

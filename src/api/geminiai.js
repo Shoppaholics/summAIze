@@ -3,16 +3,19 @@ import { gemini } from "../lib/geminiClient.js";
 export async function summarizeAndExtractWithGemini(emailContent) {
   try {
     const model = gemini.getGenerativeModel({ model: "gemini-1.5-flash" });
-    const prompt = `"You are an email summarizer. Summarize the email and identify any deadlines, tasks, and key points. Organize them into actionable items.
-              Keep it to under 100 words. The email content is as follows": ${emailContent}`;
+    const prompt = `Summarize this email content into a clear, actionable format. Focus on:
+    1. Main topic or request
+    2. Any action items or deadlines
+    3. Key details that require attention
 
-    //console.log("Prompt: ", prompt);
+    Keep the summary concise (max 3 sentences) and highlight any urgent matters.
+    Format it in a natural, easy-to-read way.
+
+    Email content: ${emailContent}`;
 
     const result = await model.generateContent(prompt);
     const response = await result.response;
-    const summary = response.text();
-    //console.log("Summary: ", summary);
-    return summary.trim();
+    return response.text().trim();
   } catch (error) {
     console.error("Error summarizing email with Gemini:", error);
     throw error;
