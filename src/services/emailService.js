@@ -6,11 +6,16 @@ export const fetchEmails = async (userId) => {
       params: { userId },
     });
 
-    const { connectedEmails } = response.data;
-    console.log("Email format: ", connectedEmails);
-    return { connectedEmails: response.data };
+    // Clean up the response data structure
+    const emails = response.data.map((emailAccount) => ({
+      email: emailAccount.emailAddress,
+      messages: emailAccount.emails?.data || [],
+      error: emailAccount.error,
+    }));
+
+    return { connectedEmails: emails };
   } catch (error) {
-    console.error(error);
+    console.error("Error fetching emails:", error);
     return { error: "Error fetching emails" };
   }
 };

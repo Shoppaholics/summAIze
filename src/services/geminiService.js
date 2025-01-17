@@ -1,55 +1,44 @@
 import { summarizeAndExtractWithGemini } from "../api/geminiai.js";
-
 import { fetchEmails } from "./emailService.js";
 
-console.log("Start:");
 export const summarizeEmails = async (userId) => {
-  console.log("SummarizeEmails called with userId:", userId);
   try {
-    const { connectedEmails } = await fetchEmails(userId);
-    console.log("Fetched emails:", connectedEmails);
+    const { connectedEmails, error } = await fetchEmails(userId);
 
-    if (!connectedEmails || !Array.isArray(connectedEmails)) {
-      console.warn("Fetched emails are invalid or empty");
-      return { connectedEmails: [] };
+    if (error || !connectedEmails) {
+      console.warn("Failed to fetch emails:", error);
+      return { error: "Failed to fetch emails" };
     }
 
-    const summarizedEmails = await Promise.all(
-      connectedEmails.map(async (email) => {
-        try {
-          const messagesList = email.emails.data;
-          const summarizedMessages = await Promise.all(
-            messagesList.map(async (message) => {
-              try {
-                const summary = await summarizeAndExtractWithGemini(
-                  message.body
-                );
-                return { ...message, summary };
-              } catch (error) {
-                console.error(
-                  "Error summarizing message ${message.id}:",
-                  error
-                );
-                return { ...message, summary: "Error generating summary" };
-              }
-            })
-          );
-          return {
-            ...email,
-            emails: { ...email.emails, data: summarizedMessages },
-          };
-        } catch (err) {
-          console.error(`Error summarizing email ${email.id}:`, err);
-          return { ...email, summary: "Error generating summary" }; // Fallback
-        }
-      })
+    // Process emails with Gemini
+    const summary = await Promise.all(
+      connectedEmails
+        .flatMap((account) =>
+          (account.messages || []).map(async (message) => {
+            try {
+              const aiSummary = await summarizeAndExtractWithGemini(
+                message.body || message.snippet
+              );
+              return {
+                from: message.fromName || message.from,
+                subject: message.subject || "No Subject",
+                summary: aiSummary,
+                messageUrl: message.messageUrl,
+                provider: message.provider,
+                grantId: message.grantId,
+              };
+            } catch (err) {
+              console.error("Error summarizing email:", err);
+              return null;
+            }
+          })
+        )
+        .filter(Boolean) // Remove null values from failed summaries
     );
 
-    console.log("New format: ", summarizedEmails);
-    //console.log("Summarized emails:", summarizedEmails);
-    return { emails: summarizedEmails };
+    return { summary };
   } catch (error) {
-    console.error("Error in summarizeEmails function:", error);
+    console.error("Error in summarizeEmails:", error);
     return { error: "Error summarizing emails" };
   }
 };

@@ -5,7 +5,7 @@ import PropTypes from "prop-types";
 
 import { generateTasks } from "../api/geminiai";
 
-function Input({ onAdd }) {
+function Input(props) {
   const [inputText, setInputText] = useState("");
   const [isGenerating, setIsGenerating] = useState(false);
   const textareaRef = useRef(null);
