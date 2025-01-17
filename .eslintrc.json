@@ -20,6 +20,7 @@
   },
   "rules": {
     "prettier/prettier": "error",
+<<<<<<< Updated upstream
     "import/order": [
       "error",
       {
@@ -35,5 +36,22 @@
         "alphabetize": { "order": "asc", "caseInsensitive": true }
       }
     ]
+=======
+    // "import/order": [
+    //   "error",
+    //   {
+    //     "groups": [
+    //       "builtin",
+    //       "external",
+    //       "internal",
+    //       "parent",
+    //       "sibling",
+    //       "index"
+    //     ],
+    //     "newlines-between": "always",
+    //     "alphabetize": { "order": "asc", "caseInsensitive": true }
+    "import/order": "off",
+    "react/prop-types": "off"
+>>>>>>> Stashed changes
   }
 }
