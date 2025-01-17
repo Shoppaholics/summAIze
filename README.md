@@ -67,9 +67,9 @@ Before you start, make sure you have the following installed:
     
    - Navigate to the `summAIze/src/api` directory and run the following command to start the Express server:
 
-    ```
-    node server.js
-    ```
+   ```
+   node server.js
+   ```
 
    - The server will start running on `http://localhost:3001`.
 
