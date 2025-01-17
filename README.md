@@ -170,6 +170,8 @@ Please refer to <a href="#4-introduction-to-main-interface">Introduction to Main
 - Click the `X` button next to the task you want to remove.
 - Once the `X` button is clicked, the task will no longer appear in your task list.
 
+<br>
+
 ### 5. Summarise emails and generate tasks
 - Click the `Summarize emails` button on the main interface.
 - Specify the number of recent emails you want to summarise in the popup dialog box shown below. The default number of emails is kept to 5. 
@@ -186,6 +188,8 @@ Please refer to <a href="#4-introduction-to-main-interface">Introduction to Main
    3. A brief summary of the email content.
    4. Any actions to be taken for that specific email.
    5. `View email` button that brings the user to the specific email in their inbox.
+
+<br>
 
 ### 6. Access internal calendar
 
