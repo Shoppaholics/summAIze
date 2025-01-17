@@ -1,6 +1,8 @@
 # summAIze
 
-summAIze is a project or Hack For Good Hackathon 2025, designed as a PA system to arrange and schedule meetings, automate tasks, generate summaries of emmails and arrange meetings.
+summAIze is a project or Hack For Good Hackathon 2025, designed as a PA system to arrange and schedule meetings, automate tasks, generate summaries of emmails and arrange meetings. It addresses the second problem statement, as a product for Singapore Book Council, with its various fetaures which will be discussed in details below, acting as an efficient PA system for users.
+
+summAize users Google's Gemini AI to summarise emails and automate the generation of tasks. Utilising the free tier of the Gemini API, this makes summAIze a cost effective system for the NPO.
 
 ## Features
 
