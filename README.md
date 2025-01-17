@@ -4,6 +4,8 @@ summAIze is a project or Hack For Good Hackathon 2025, designed as a PA system t
 
 summAize users Google's Gemini AI to summarise emails and automate the generation of tasks. Utilising the free tier of the Gemini API, this makes summAIze a cost effective system for the NPO.
 
+<br>
+
 ## Features
 
 - Sign up using email
@@ -13,6 +15,8 @@ summAize users Google's Gemini AI to summarise emails and automate the generatio
 - Summarise emails and generate tasks
 - Access internal calendar
 
+<br>
+
 ## Prerequisites
 
 Before you start, make sure you have the following installed:
@@ -20,6 +24,8 @@ Before you start, make sure you have the following installed:
 - **Node.js**: [Download and install Node.js](https://nodejs.org/)
 - **NPM**: Comes with Node.js, used for managing project dependencies.
 - **Git**: [Download and install Git](https://git-scm.com/)
+
+<br>
 
 ## Environment Setup
 
@@ -60,6 +66,8 @@ Before you start, make sure you have the following installed:
    - **Nylas**: Sign up at [Nylas](https://www.nylas.com/) and create a new application to get your `Client ID` and `API Key`.
    - **Supabase**: Sign up at [Supabase](https://supabase.com/dashboard/sign-in?returnTo=%2Fprojects) and go to the API section of your project to obtain your URL and Anon key.
    - **Google Gemini**: Sign up at [Google Cloud](https://cloud.google.com/) to get your API key.
+
+<br>
 
 ## Running the project
 
