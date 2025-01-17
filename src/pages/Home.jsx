@@ -11,6 +11,7 @@ import { summarizeEmails } from "../services/geminiService";
 import { connectEmailWithNylas } from "../services/nylasService";
 import LinkToEmail from "../components/LinkToEmail";
 import "../styles/Home.css";
+import EmailCountPopup from "../components/EmailCountPopup";
 
 const Home = () => {
   const [user, setUser] = useState(null);
@@ -18,6 +19,7 @@ const Home = () => {
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState(null);
   const [connectedEmails, setConnectedEmails] = useState(null);
+  const [showEmailPopup, setShowEmailPopup] = useState(false);
 
   useEffect(() => {
     const fetchSession = async () => {
@@ -91,11 +93,12 @@ const Home = () => {
   };
 
   // Fetch summarized emails
-  const summarizeFetchedEmails = async () => {
+  const handleFetchEmails = async (emailCount) => {
+    setShowEmailPopup(false);
     setLoading(true);
     setMessage("");
     try {
-      const { summary, error } = await summarizeEmails(user?.id);
+      const { summary, error } = await summarizeEmails(user?.id, emailCount);
 
       if (error) {
         setMessage(error);
@@ -176,11 +179,11 @@ const Home = () => {
             Connect email
           </button>
           <button
-            onClick={summarizeFetchedEmails}
+            onClick={() => setShowEmailPopup(true)}
             disabled={loading}
             className="action-button"
           >
-            Fetch emails
+            Summarize emails
           </button>
           <button onClick={handleSignOut} className="action-button sign-out">
             Sign Out
@@ -211,6 +214,13 @@ const Home = () => {
 
       <Input onAdd={addTask} />
       <Footer />
+
+      {showEmailPopup && (
+        <EmailCountPopup
+          onSubmit={handleFetchEmails}
+          onClose={() => setShowEmailPopup(false)}
+        />
+      )}
     </div>
   ) : (
     <div className="auth-container">
