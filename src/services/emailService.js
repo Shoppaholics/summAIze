@@ -1,16 +1,21 @@
 import axios from "axios";
 
 export const fetchEmails = async (userId) => {
-  // Retrieve Nylas grant ids for emails
-
   try {
     const response = await axios.get("http://localhost:3001/nylas/email/read", {
       params: { userId },
     });
 
-    return { emails: response.data };
+    // Clean up the response data structure
+    const emails = response.data.map((emailAccount) => ({
+      email: emailAccount.emailAddress,
+      messages: emailAccount.emails?.data || [],
+      error: emailAccount.error,
+    }));
+
+    return { connectedEmails: emails };
   } catch (error) {
-    console.error(error);
+    console.error("Error fetching emails:", error);
     return { error: "Error fetching emails" };
   }
 };
