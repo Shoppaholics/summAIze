@@ -1,9 +1,9 @@
 import { summarizeAndExtractWithGemini } from "../api/geminiai.js";
 import { fetchEmails } from "./emailService.js";
 
-export const summarizeEmails = async (userId) => {
+export const summarizeEmails = async (userId, emailCount) => {
   try {
-    const { connectedEmails, error } = await fetchEmails(userId);
+    const { connectedEmails, error } = await fetchEmails(userId, emailCount);
 
     if (error || !connectedEmails) {
       console.warn("Failed to fetch emails:", error);

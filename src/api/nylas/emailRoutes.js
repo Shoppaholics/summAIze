@@ -7,7 +7,7 @@ const router = express.Router();
 
 // Route: Fetch emails
 router.get("/read", async (req, res) => {
-  const { userId } = req.query;
+  const { userId, count } = req.query;
   if (!userId) {
     return res.status(400).json({ error: "User ID is required" });
   }
@@ -30,7 +30,7 @@ router.get("/read", async (req, res) => {
         const messages = await nylas.messages.list({
           identifier: email.nylas_grant_id,
           queryParams: {
-            limit: 5,
+            limit: parseInt(count),
           },
         });
 

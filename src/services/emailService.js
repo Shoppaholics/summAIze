@@ -1,9 +1,12 @@
 import axios from "axios";
 
-export const fetchEmails = async (userId) => {
+export const fetchEmails = async (userId, count) => {
   try {
     const response = await axios.get("http://localhost:3001/nylas/email/read", {
-      params: { userId },
+      params: {
+        userId,
+        count,
+      },
     });
 
     // Clean up the response data structure
