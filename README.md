@@ -65,23 +65,23 @@ Before you start, make sure you have the following installed:
 
 ### 1. **Start the server**
     
-    Navigate to the `summAIze/src/api` directory and run the following command to start the Express server:
+   - Navigate to the `summAIze/src/api` directory and run the following command to start the Express server:
 
     ```
     node server.js
     ```
 
-    The server will start running on `http://localhost:3001`.
+   - The server will start running on `http://localhost:3001`.
 
 ### 2. **Run the project**
 
-    Enter the following command in a new terminal window:
+   - Enter the following command in a new terminal window:
 
-    ```
-    npm start
-    ```
+   ```
+   npm start
+   ```
 
-    The project will start running on `http://localhost:3000`.
+   - The project will start running on `http://localhost:3000`.
 
 ### 3. **Sign in/Sign up Interface**
 
@@ -89,9 +89,9 @@ When summAIze is first started, you will see an interface like the one below, pr
 
 ![SignUpPage](./images/SignUpPage.png)
 
-<div markdown="span" class="alert alert-primary">:pushpin: **Note:**
 
-Information for the signing up and signing in process is given [below](#1-sign-up-using-email).
+<div style="background-color: #d0eaff; border-left: 4px solid #2196F3; padding: 10px; margin-bottom: 10px; border-radius: 5px; color: black;">
+📌 <strong>Note:</strong> Information for the signing up and signing in process is given <a href="#1-sign-up-using-email">below</a>.
 </div>
 
 ### 4. **Introduction to Main Interface**
@@ -120,9 +120,9 @@ After logging in, you will see an interface like the one below, made up of multi
 
 ![MainPage](./images/MainPage.png)
 
-<div markdown="span" class="alert alert-primary">:pushpin: **Note:**
-
-Please refer to [Introduction to Main Interface](#4-introduction-to-main-interface) for a breakdown of each components and its functionality.
+<div style="background-color: #d0eaff; border-left: 4px solid #2196F3; padding: 10px; margin-bottom: 10px; border-radius: 5px; color: black;">
+📌 <strong>Note:</strong> 
+Please refer to <a href="#4-introduction-to-main-interface">Introduction to Main Interface</a> for a breakdown of each components and its functionality.
 </div>
 
 - To log out, click the `Sign Out` button at the top right of the screen.
@@ -144,9 +144,7 @@ Please refer to [Introduction to Main Interface](#4-introduction-to-main-interfa
    1. Task Name: A concise summary of the task.
    2. Task Description: Steps that need to be taken to complete the task
 
-      <div markdown="span" class="alert alert-primary">:pushpin: **Note:**
-
-      For some tasks, the task description will contain `Do you want me to create a calendar event for you at this timing?` or related messages. We plan to integrate a button to automically add the event to the calendar in the future for this type of tasks.
+      <div style="background-color: #d0eaff; border-left: 4px solid #2196F3; padding: 10px; margin-bottom: 10px; border-radius: 5px; color: black;"> 📌 <strong>Note:</strong> For some tasks, the task description will contain `Do you want me to create a calendar event for you at this timing?` or related messages. We plan to integrate a button to automically add the event to the calendar in the future for this type of tasks.
       </div>
 
 
