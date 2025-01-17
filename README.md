@@ -92,5 +92,5 @@ Before you start, make sure you have the following installed:
 ### Connect email
 
 - To connect your email to be used for fetching and summarising your emails, followed by creating relevant tasks, click the `Connect Email` button in the header.
-- You will be redirected to Nyla's page to login in through your Gmail account.
-- After logging in through your gmail account, you will be redirected back to summAIze's Home page.
+- You will be redirected to Nyla's page to login in through your Gmail or Outlook account.
+- After logging in through your email account, you will be redirected back to summAIze's Home page.
